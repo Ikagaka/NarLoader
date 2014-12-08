@@ -4,16 +4,16 @@ NarLoader - Nanika ARchive Loader
 Installation
 --------------------------
 
-    npm install NarLoader
+    npm install narloader
 
-    bower install NarLoader
+    bower install narloader
 
 If you want to use Promise in a environment not having build-in Promise, 'bluebird' required.
 
 Usage
 --------------------------
 
-    var NarLoader = require('NarLoader').NarLoader;
+    var NarLoader = require('narloader').NarLoader;
     var buffer = (nar data ArrayBuffer);
     var directory = NarLoader.loadFromBuffer(buffer);
 
