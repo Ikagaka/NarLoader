@@ -1,5 +1,5 @@
 {
-	"name": "NarLoader",
+	"name": "narloader",
 	"description": "NarLoader - Nanika ARchive Loader",
 	"main": "NarLoader.js",
 	"dependencies": {
