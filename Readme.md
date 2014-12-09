@@ -201,6 +201,20 @@ contents paths are same as old.
 
 [NanikaDirectory] new NanikaDirectory
 
+#### hasElement(elempath)
+
+    var exists = nd.hasElement('shell/hoge');
+
+the "exists"
+
+##### param
+
+- **elempath** [string] element path
+
+##### return
+
+[Boolean] true if exists else false
+
 #### pathToRegExp(path)
 
 internal

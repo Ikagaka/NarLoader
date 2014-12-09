@@ -121,6 +121,12 @@ class NanikaDirectory
 			.forEach (path) ->
 				delete directory[path]
 		new NanikaDirectory directory, options
+	hasElement: (elempath) ->
+		elempathre = @pathToRegExp(elempath)
+		for path of @files
+			if elempathre.test path
+				return true
+		return false
 	pathToRegExp: (path) ->
 		new RegExp '^' + @path.canonical(path).replace(/(\W)/g, '\\$1') + '(?:$|/)'
 	path:
