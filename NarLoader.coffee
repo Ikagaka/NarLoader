@@ -23,8 +23,8 @@ class NarLoader
 	@loadFromBlob: (blob) ->
 		new Promise (resolve, reject) ->
 			reader = new FileReader()
-			reader.addEventListener "load", -> resolve reader.result
-			reader.addEventListener "error", (event) -> reject event.target.error
+			reader.onload = -> resolve reader.result
+			reader.onerror = (event) -> reject event.target.error
 			reader.readAsArrayBuffer(blob)
 		.then @loadFromBuffer
 	@unzip = (buffer) ->
