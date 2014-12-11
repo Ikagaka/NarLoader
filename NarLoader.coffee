@@ -21,11 +21,12 @@ class NarLoader
 		NarLoader.wget src, "arraybuffer"
 		.then @loadFromBuffer
 	@loadFromBlob: (blob) ->
-		url = URL.createObjectURL(blob)
-		@loadFromURL url
-		.then (directory)->
-			URL.revokeObjectURL(url)
-			directory
+		new Promise (resolve, reject) ->
+			reader = new FileReader()
+			reader.addEventListener "load", -> resolve reader.result
+			reader.addEventListener "error", (event) -> reject event.target.error
+			reader.readAsArrayBuffer(blob)
+		.then @loadFromBuffer
 	@unzip = (buffer) ->
 		zip = new JSZip()
 		zip.load(buffer, checkCRC32: true)
