@@ -120,7 +120,19 @@
 
   NanikaDirectory = (function() {
     function NanikaDirectory(files, options) {
-      this.files = files != null ? files : {};
+      var file, path;
+      if (files == null) {
+        files = {};
+      }
+      this.files = {};
+      for (path in files) {
+        file = files[path];
+        if (file instanceof NanikaFile) {
+          this.files[path] = file;
+        } else {
+          this.files[path] = new NanikaFile(file);
+        }
+      }
       this.parse(options);
     }
 

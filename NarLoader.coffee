@@ -61,7 +61,13 @@ class NanikaFile
 	valueOf: -> @buffer()
 
 class NanikaDirectory
-	constructor: (@files={}, options) ->
+	constructor: (files={}, options) ->
+		@files = {}
+		for path, file of files
+			if file instanceof NanikaFile
+				@files[path] = file
+			else
+				@files[path] = new NanikaFile(file)
 		@parse(options)
 	parse: ({has_install, has_descript}={})->
 		if @files["install.txt"]?

@@ -61,9 +61,15 @@ internal
 
 ### class NanikaFile
 
-    var nf = new NanikaFile(jszipfile);
+    var nf = new NanikaFile(file);
 
-file object that has jszip file object
+file object that has jszip file object or ArrayBuffer
+
+#### constructor(file)
+
+##### param
+
+- **file** [ArrayBuffer|ZipObject] file contents
 
 #### buffer()
 
@@ -95,13 +101,13 @@ same as buffer()
 
     var nd = new NanikaDirectory({'path/to/file.txt': nanikafile, ...}, {has_install: true, has_descript: false});
 
-directory object that has filepath hash of NanikaFile
+directory object that has filepath hash of NanikaFile or NanikaFile's buffer type
 
 #### constructor(files, options)
 
 ##### param
 
-- **files** [Hash<string, NanikaFile>] directory contents
+- **files** [Hash<string, NanikaFile|ArrayBuffer|ZipObject>] directory contents
 - **options** [Hash] options
 
 ##### options
