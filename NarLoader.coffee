@@ -89,6 +89,17 @@ class NanikaDirectory
 			if result = path.match /^([^\/]+)/
 				children[result[1]] = true
 		Object.keys(children)
+	addDirectory: (dir, options) ->
+		directory = {}
+		for path, file of @files
+			directory[path] = file
+		if dir instanceof NanikaDirectory
+			files = dir.files
+		else
+			files = dir
+		for path, file of files
+			directory[path] = file
+		new NanikaDirectory directory, options
 	getDirectory: (dirpath, options) ->
 		dirpathre = @pathToRegExp(dirpath)
 		directory = {}

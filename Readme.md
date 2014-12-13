@@ -1,6 +1,8 @@
 NarLoader - Nanika ARchive Loader
 ==========================
 
+[Nanika ARchive](http://usada.sakura.vg/contents/install.html) (*.nar) loader
+
 Installation
 --------------------------
 
@@ -138,6 +140,21 @@ returns children list (like readdir)
 ##### return
 
 [Array] names of elements
+
+#### addDirectory(dir, options)
+
+    var new_nd = nd.addDirectory(dir);
+
+get new NanikaDirectory that has contents merged with given dir.
+
+##### param
+
+- **dir** [NanikaDirectory|Hash<string, NanikaFile|ArrayBuffer|ZipObject>] directory path
+- **options** [Hash] options for new NanikaDirectory
+
+##### return
+
+[NanikaDirectory] new NanikaDirectory
 
 #### getDirectory(dirpath, options)
 

@@ -173,6 +173,26 @@
       return Object.keys(children);
     };
 
+    NanikaDirectory.prototype.addDirectory = function(dir, options) {
+      var directory, file, files, path, _ref;
+      directory = {};
+      _ref = this.files;
+      for (path in _ref) {
+        file = _ref[path];
+        directory[path] = file;
+      }
+      if (dir instanceof NanikaDirectory) {
+        files = dir.files;
+      } else {
+        files = dir;
+      }
+      for (path in files) {
+        file = files[path];
+        directory[path] = file;
+      }
+      return new NanikaDirectory(directory, options);
+    };
+
     NanikaDirectory.prototype.getDirectory = function(dirpath, options) {
       var directory, dirpathre;
       dirpathre = this.pathToRegExp(dirpath);
