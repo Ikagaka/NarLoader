@@ -5,7 +5,7 @@
 (function() {
   var Encoding, JSZip, NanikaDirectory, NanikaFile, NarLoader, Promise, WMDescript;
 
-  if (typeof require !== "undefined" && require !== null) {
+  if ((typeof require !== "undefined" && require !== null) && (typeof module !== "undefined" && module !== null)) {
     JSZip = require('jszip');
     Encoding = require('encoding-japanese');
     WMDescript = require('ikagaka.wmdescript.js');

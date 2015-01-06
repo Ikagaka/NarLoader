@@ -1,6 +1,6 @@
 ### (C) 2014 Narazaka : Licensed under The MIT License - http://narazaka.net/license/MIT?2014 ###
 
-if require?
+if require? and module?
 	JSZip = require('jszip')
 	Encoding = require('encoding-japanese')
 	WMDescript = require('ikagaka.wmdescript.js')
