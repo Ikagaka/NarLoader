@@ -51,7 +51,7 @@ class NarLoader
 
 class NanikaFile
 	constructor: (@_buffer) ->
-		if @_buffer.dir
+		if @_buffer.dir or @_buffer.options?.dir
 			@_isdir = true
 	buffer: ->
 		if @_buffer.asArrayBuffer?

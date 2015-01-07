@@ -95,8 +95,9 @@
 
   NanikaFile = (function() {
     function NanikaFile(_buffer) {
+      var _ref;
       this._buffer = _buffer;
-      if (this._buffer.dir) {
+      if (this._buffer.dir || ((_ref = this._buffer.options) != null ? _ref.dir : void 0)) {
         this._isdir = true;
       }
     }
