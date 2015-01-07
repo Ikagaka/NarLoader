@@ -96,6 +96,9 @@
   NanikaFile = (function() {
     function NanikaFile(_buffer) {
       this._buffer = _buffer;
+      if (this._buffer.dir) {
+        this._isdir = true;
+      }
     }
 
     NanikaFile.prototype.buffer = function() {
@@ -112,6 +115,14 @@
 
     NanikaFile.prototype.valueOf = function() {
       return this.buffer();
+    };
+
+    NanikaFile.prototype.isFile = function() {
+      return !this._isdir;
+    };
+
+    NanikaFile.prototype.isDirectory = function() {
+      return this._isdir;
     };
 
     return NanikaFile;

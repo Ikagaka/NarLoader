@@ -51,6 +51,8 @@ class NarLoader
 
 class NanikaFile
 	constructor: (@_buffer) ->
+		if @_buffer.dir
+			@_isdir = true
 	buffer: ->
 		if @_buffer.asArrayBuffer?
 			@_buffer = @_buffer.asArrayBuffer()
@@ -59,6 +61,8 @@ class NanikaFile
 	toString: ->
 		Encoding.codeToString(Encoding.convert(new Uint8Array(@buffer()), 'UNICODE', 'AUTO'))
 	valueOf: -> @buffer()
+	isFile: -> !@_isdir
+	isDirectory: -> @_isdir
 
 class NanikaDirectory
 	constructor: (files={}, options) ->
