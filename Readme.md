@@ -247,11 +247,11 @@ internal
 
 ### class Descript
 
-    var keyVal = new Descript(text);
+    var keyVal = Descript.parse(text);
 
 parse csv text
 
-#### constructor(text)
+#### parse(text)
 
 ##### param
 
