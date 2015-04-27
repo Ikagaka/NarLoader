@@ -320,6 +320,8 @@
 	}
   };
 
+  NarLoader.Descript = Descript;
+
   if ((typeof module !== "undefined" && module !== null ? module.exports : void 0) != null) {
     module.exports = {
       NarLoader: NarLoader,

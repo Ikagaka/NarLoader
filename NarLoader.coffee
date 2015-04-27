@@ -177,6 +177,8 @@ Descript =
 		return dic;
 	}`
 
+NarLoader.Descript = Descript
+
 if module?.exports?
 	module.exports = NarLoader: NarLoader, NanikaFile: NanikaFile, NanikaDirectory: NanikaDirectory
 else
