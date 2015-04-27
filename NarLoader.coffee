@@ -3,13 +3,11 @@
 if require? and module?
 	JSZip = require('jszip')
 	Encoding = require('encoding-japanese')
-	WMDescript = require('ikagaka.wmdescript.js')
 	unless Promise?
 		Promise = require('bluebird')
 else
 	JSZip = @JSZip
 	Encoding = @Encoding
-	WMDescript = @WMDescript
 	unless Promise?
 		Promise = @Promise
 
@@ -75,11 +73,11 @@ class NanikaDirectory
 		@parse(options)
 	parse: ({has_install, has_descript}={})->
 		if @files["install.txt"]?
-			@install = WMDescript.parse(@files["install.txt"].toString())
+			@install = new Descript(@files["install.txt"].toString())
 		else if has_install
 			throw "install.txt not found"
 		if @files["descript.txt"]?
-			@descript = WMDescript.parse(@files["descript.txt"].toString())
+			@descript = new Descript(@files["descript.txt"].toString())
 		else if has_descript
 			throw "descript.txt not found"
 	asArrayBuffer: ->
@@ -154,6 +152,27 @@ class NanikaDirectory
 	path:
 		canonical: (path) ->
 			path.replace(/\\/g, '/').replace(/^\.?\//, '').replace(/\/?$/, '')
+
+class Descript
+	regComment = /(?:(?:^|\s)\/\/.*)|^\s+?$/g
+	constructor: (text)->
+		text = text.replace(/(?:\r\n|\r|\n)/g, "\n")
+		regexec regComment, text, ([match, __...])-> #commentout
+			text = text.replace(match, "")
+		lines = text.split("\n");
+		lines = lines.filter (val)-> val.length isnt 0
+		for line in lines
+			[key, vals...] = line.split(",")
+			key = key.replace(/^\s+/, "").replace(/\s+$/, "")
+			val = vals.join(",").replace(/^\s+/, "").replace(/\s+$/, "")
+			@[key] = val
+	regexec = (reg, str, fn)->
+		ary = []
+		while true
+			matches = reg.exec str
+			if not matches? then break
+			ary.push fn matches
+		ary
 
 if module?.exports?
 	module.exports = NarLoader: NarLoader, NanikaFile: NanikaFile, NanikaDirectory: NanikaDirectory

@@ -5,8 +5,7 @@
 	"dependencies": {
 		"jszip": ">= 2.0.0",
 		"encoding-japanese": "polygonplanet/encoding.js#master",
-		"bluebird": ">= 2.3.11",
-		"ikagaka.wmdescript.js": "Ikagaka/WMDescript.js"
+		"bluebird": ">= 2.3.11"
 	},
 	"ignore": [
 		"**/.*",
