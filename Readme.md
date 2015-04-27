@@ -257,6 +257,10 @@ parse csv text
 
 - **text** [string] csv text
 
+##### return
+
+[{[key:string]: string;}] key-value Object
+
 License
 --------------------------
 
