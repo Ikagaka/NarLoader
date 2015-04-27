@@ -73,11 +73,11 @@ class NanikaDirectory
 		@parse(options)
 	parse: ({has_install, has_descript}={})->
 		if @files["install.txt"]?
-			@install = new Descript(@files["install.txt"].toString())
+			@install = Descript.parse(@files["install.txt"].toString())
 		else if has_install
 			throw "install.txt not found"
 		if @files["descript.txt"]?
-			@descript = new Descript(@files["descript.txt"].toString())
+			@descript = Descript.parse(@files["descript.txt"].toString())
 		else if has_descript
 			throw "descript.txt not found"
 	asArrayBuffer: ->
@@ -153,26 +153,29 @@ class NanikaDirectory
 		canonical: (path) ->
 			path.replace(/\\/g, '/').replace(/^\.?\//, '').replace(/\/?$/, '')
 
-class Descript
-	regComment = /(?:(?:^|\s)\/\/.*)|^\s+?$/g
-	constructor: (text)->
-		text = text.replace(/(?:\r\n|\r|\n)/g, "\n")
-		regexec regComment, text, ([match, __...])-> #commentout
-			text = text.replace(match, "")
-		lines = text.split("\n");
-		lines = lines.filter (val)-> val.length isnt 0
-		for line in lines
-			[key, vals...] = line.split(",")
-			key = key.replace(/^\s+/, "").replace(/\s+$/, "")
-			val = vals.join(",").replace(/^\s+/, "").replace(/\s+$/, "")
-			@[key] = val
-	regexec = (reg, str, fn)->
-		ary = []
-		while true
-			matches = reg.exec str
-			if not matches? then break
-			ary.push fn matches
-		ary
+Descript =
+	parse: `function (text){
+		// @arg String
+		// @ret {[id: String]: String;}
+		text = text.replace(/(?:\r\n|\r|\n)/g, "\n"); // CRLF->LF
+		while(true){// remove commentout
+			var match = (/(?:(?:^|\s)\/\/.*)|^\s+?$/g.exec(text) || ["",""])[0];
+			if(match.length === 0) break;
+			text = text.replace(match, "");
+		}
+		var lines = text.split("\n");
+		lines = lines.filter(function(line){ return line.length !== 0; }); // remove no content line
+		var dic = lines.reduce(function(dic, line){
+			var tmp = line.split(",");
+			var key = tmp[0];
+			var vals = tmp.slice(1);
+			key = key.trim();
+			var val = vals.join(",").trim();
+			dic[key] = val;
+			return dic;
+		}, {});
+		return dic;
+	}`
 
 if module?.exports?
 	module.exports = NarLoader: NarLoader, NanikaFile: NanikaFile, NanikaDirectory: NanikaDirectory

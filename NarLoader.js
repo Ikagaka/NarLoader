@@ -3,8 +3,7 @@
 /* (C) 2014 Narazaka : Licensed under The MIT License - http://narazaka.net/license/MIT?2014 */
 
 (function() {
-  var Descript, Encoding, JSZip, NanikaDirectory, NanikaFile, NarLoader, Promise,
-    slice = [].slice;
+  var Descript, Encoding, JSZip, NanikaDirectory, NanikaFile, NarLoader, Promise;
 
   if ((typeof require !== "undefined" && require !== null) && (typeof module !== "undefined" && module !== null)) {
     JSZip = require('jszip');
@@ -151,12 +150,12 @@
       var has_descript, has_install, ref;
       ref = arg != null ? arg : {}, has_install = ref.has_install, has_descript = ref.has_descript;
       if (this.files["install.txt"] != null) {
-        this.install = new Descript(this.files["install.txt"].toString());
+        this.install = Descript.parse(this.files["install.txt"].toString());
       } else if (has_install) {
         throw "install.txt not found";
       }
       if (this.files["descript.txt"] != null) {
-        return this.descript = new Descript(this.files["descript.txt"].toString());
+        return this.descript = Descript.parse(this.files["descript.txt"].toString());
       } else if (has_descript) {
         throw "descript.txt not found";
       }
@@ -296,48 +295,30 @@
 
   })();
 
-  Descript = (function() {
-    var regComment, regexec;
-
-    regComment = /(?:(?:^|\s)\/\/.*)|^\s+?$/g;
-
-    function Descript(text) {
-      var i, key, len, line, lines, ref, val, vals;
-      text = text.replace(/(?:\r\n|\r|\n)/g, "\n");
-      regexec(regComment, text, function(arg) {
-        var __, match;
-        match = arg[0], __ = 2 <= arg.length ? slice.call(arg, 1) : [];
-        return text = text.replace(match, "");
-      });
-      lines = text.split("\n");
-      lines = lines.filter(function(val) {
-        return val.length !== 0;
-      });
-      for (i = 0, len = lines.length; i < len; i++) {
-        line = lines[i];
-        ref = line.split(","), key = ref[0], vals = 2 <= ref.length ? slice.call(ref, 1) : [];
-        key = key.replace(/^\s+/, "").replace(/\s+$/, "");
-        val = vals.join(",").replace(/^\s+/, "").replace(/\s+$/, "");
-        this[key] = val;
-      }
-    }
-
-    regexec = function(reg, str, fn) {
-      var ary, matches;
-      ary = [];
-      while (true) {
-        matches = reg.exec(str);
-        if (matches == null) {
-          break;
-        }
-        ary.push(fn(matches));
-      }
-      return ary;
-    };
-
-    return Descript;
-
-  })();
+  Descript = {
+    parse: function (text){
+		// @arg String
+		// @ret {[id: String]: String;}
+		text = text.replace(/(?:\r\n|\r|\n)/g, "\n"); // CRLF->LF
+		while(true){// remove commentout
+			var match = (/(?:(?:^|\s)\/\/.*)|^\s+?$/g.exec(text) || ["",""])[0];
+			if(match.length === 0) break;
+			text = text.replace(match, "");
+		}
+		var lines = text.split("\n");
+		lines = lines.filter(function(line){ return line.length !== 0; }); // remove no content line
+		var dic = lines.reduce(function(dic, line){
+			var tmp = line.split(",");
+			var key = tmp[0];
+			var vals = tmp.slice(1);
+			key = key.trim();
+			var val = vals.join(",").trim();
+			dic[key] = val;
+			return dic;
+		}, {});
+		return dic;
+	}
+  };
 
   if ((typeof module !== "undefined" && module !== null ? module.exports : void 0) != null) {
     module.exports = {
