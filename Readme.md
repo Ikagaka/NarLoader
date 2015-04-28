@@ -23,7 +23,6 @@ or use this on the browsers ...
 
     <script src="jszip.js"></script>
     <script src="encoding.js"></script>
-    <script src="Descript.js"></script>
     <script src="bluebird.js"></script>
     <script src="NarLoader.js"></script>
     ...
@@ -245,6 +244,22 @@ internal
 #### path.canonical(path)
 
 internal
+
+### class Descript
+
+    var keyVal = Descript.parse(text);
+
+parse csv text
+
+#### parse(text)
+
+##### param
+
+- **text** [string] csv text
+
+##### return
+
+[{[key:string]: string;}] key-value Object
 
 License
 --------------------------
