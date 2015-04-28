@@ -120,6 +120,14 @@ directory object that has filepath hash of NanikaFile or NanikaFile's buffer typ
 
 Hash<string, NanikaFile>
 
+#### install
+
+`install.txt`'s contents Hash<string, string> if exists
+
+#### descript
+
+`descript.txt`'s contents Hash<string, string> if exists
+
 #### parse(options)
 
 internal
