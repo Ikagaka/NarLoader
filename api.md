@@ -1,44 +1,44 @@
-### class NarLoader
+# class NarLoader
 
 All methods bellow is static methods.
 
-#### loadFromBuffer(buffer), loadFromURL(url), loadFromBlob(blob) {static method}
+## loadFromBuffer(buffer), loadFromURL(url), loadFromBlob(blob) {static method}
 
     NarLoader.loadFromBuffer(buffer).then(...);
 
 load nar from ArrayBuffer, URL, Blob
 
-##### param
+### param
 
 - **buffer** [ArrayBuffer] nar
 - **url** [URL] nar
 - **blob** [Blob] nar
 
-##### return
+### return
 
 [NanikaDirectory] files in nar
 
-#### unzip(buffer) {static method}
+## unzip(buffer) {static method}
 
 internal
 
-#### wget(url, type) {static method}
+## wget(url, type) {static method}
 
 internal
 
-### class NanikaFile
+# class NanikaFile
 
     var nf = new NanikaFile(file);
 
 file object that has jszip file object or ArrayBuffer
 
-#### constructor(file)
+## constructor(file)
 
-##### param
+### param
 
 - **file** [ArrayBuffer|ZipObject] file contents
 
-#### buffer()
+## buffer()
 
     var arraybuf = nf.buffer();
 
@@ -46,90 +46,90 @@ first call: extract jszip file object to ArrayBuffer and cache it
 
 second call: returns cache
 
-##### return
+### return
 
 [ArrayBuffer] file content
 
-#### toString()
+## toString()
 
     var str = nf.toString();
 
 get JavaScript native str by using encoding-japanese
 
-##### return
+### return
 
 [string] file content
 
-#### valueOf()
+## valueOf()
 
 same as buffer()
 
-### class NanikaDirectory
+# class NanikaDirectory
 
     var nd = new NanikaDirectory({'path/to/file.txt': nanikafile, ...}, {has_install: true, has_descript: false});
 
 directory object that has filepath hash of NanikaFile or NanikaFile's buffer type
 
-#### constructor(files, options)
+## constructor(files, options)
 
-##### param
+### param
 
 - **files** [Hash<string, NanikaFile|ArrayBuffer|ZipObject>] directory contents
 - **options** [Hash] options
 
-##### options
+### options
 
 - **has_install** [Boolean] if true: throw if dir does not have "install.txt"
 - **has_descript** [Boolean] if true: throw if dir does not have "descript.txt"
 
-#### files
+## files
 
 Hash<string, NanikaFile>
 
-#### install
+## install
 
 `install.txt`'s contents Hash<string, string> if exists
 
-#### descript
+## descript
 
 `descript.txt`'s contents Hash<string, string> if exists
 
-#### parse(options)
+## parse(options)
 
 internal
 
-#### asArrayBuffer()
+## asArrayBuffer()
 
 returns all files as ArrayBuffer
 
-##### return
+### return
 
 [Hash<string, ArrayBuffer>] directory contents
 
-#### listChildren()
+## listChildren()
 
 returns children list (like readdir)
 
-##### return
+### return
 
 [Array] names of elements
 
-#### addDirectory(dir, options)
+## addDirectory(dir, options)
 
     var new_nd = nd.addDirectory(dir);
 
 get new NanikaDirectory that has contents merged with given dir.
 
-##### param
+### param
 
 - **dir** [NanikaDirectory|Hash<string, NanikaFile|ArrayBuffer|ZipObject>] directory path
 - **options** [Hash] options for new NanikaDirectory
 
-##### return
+### return
 
 [NanikaDirectory] new NanikaDirectory
 
-#### getDirectory(dirpath, options)
+## getDirectory(dirpath, options)
 
     var new_nd = nd.getDirectory('ghost/master', {has_descript: true});
 
@@ -137,16 +137,16 @@ get new NanikaDirectory that has contents in dirpath.
 
 contents paths are trimed. ex. 'ghost/master/dict/events.kis' -> getDirectory('ghost/master') -> 'dict/events.kis'
 
-##### param
+### param
 
 - **dirpath** [string] directory path
 - **options** [Hash] options for new NanikaDirectory
 
-##### return
+### return
 
 [NanikaDirectory] new NanikaDirectory
 
-#### wrapDirectory(dirpath, options)
+## wrapDirectory(dirpath, options)
 
     var new_nd = nd.wrapDirectory('ghost/master');
 
@@ -154,16 +154,16 @@ get new NanikaDirectory that has same contents as old but has prepended path.
 
 contents paths are prepended. ex. 'dict/events.kis' -> wrapDirectory('ghost/master') -> 'ghost/master/dict/events.kis'
 
-##### param
+### param
 
 - **dirpath** [string] directory path
 - **options** [Hash] options for new NanikaDirectory
 
-##### return
+### return
 
 [NanikaDirectory] new NanikaDirectory
 
-#### getElements(elempaths, options)
+## getElements(elempaths, options)
 
     var new_nd = nd.getElements(['ghost', 'shell']);
 
@@ -171,16 +171,16 @@ get new NanikaDirectory that has contents in elempaths (like filter).
 
 contents paths are same as old.
 
-##### param
+### param
 
 - **elempaths** [Array<string>] element paths
 - **options** [Hash] options for new NanikaDirectory
 
-##### return
+### return
 
 [NanikaDirectory] new NanikaDirectory
 
-#### removeElements(elempaths, options)
+## removeElements(elempaths, options)
 
     var new_nd = nd.removeElements(['myballoon']);
 
@@ -188,49 +188,49 @@ get new NanikaDirectory that has contents excluding elempaths (like negative fil
 
 contents paths are same as old.
 
-##### param
+### param
 
 - **elempaths** [Array<string>] element paths
 - **options** [Hash] options for new NanikaDirectory
 
-##### return
+### return
 
 [NanikaDirectory] new NanikaDirectory
 
-#### hasElement(elempath)
+## hasElement(elempath)
 
     var exists = nd.hasElement('shell/hoge');
 
 the "exists"
 
-##### param
+### param
 
 - **elempath** [string] element path
 
-##### return
+### return
 
 [Boolean] true if exists else false
 
-#### pathToRegExp(path)
+## pathToRegExp(path)
 
 internal
 
-#### path.canonical(path)
+## path.canonical(path)
 
 internal
 
-### class Descript
+# class Descript
 
     var keyVal = Descript.parse(text);
 
 parse csv text
 
-#### parse(text)
+## parse(text)
 
-##### param
+### param
 
 - **text** [string] csv text
 
-##### return
+### return
 
 [{[key:string]: string;}] key-value Object
