@@ -219,17 +219,17 @@ internal
 
 internal
 
-# class Descript
+# class NarDescript
 
-    var keyVal = Descript.parse(text);
+    var keyVal = NarDescript.parse(descript_str);
 
-parse csv text
+parse descript.txt format
 
 ## parse(text)
 
 ### param
 
-- **text** [string] csv text
+- **descript_str** [string] descript.txt format string
 
 ### return
 

@@ -3,7 +3,7 @@
 /* (C) 2014 Narazaka : Licensed under The MIT License - http://narazaka.net/license/MIT?2014 */
 
 (function() {
-  var Descript, Encoding, JSZip, NanikaDirectory, NanikaFile, NarLoader, Promise;
+  var Encoding, JSZip, NanikaDirectory, NanikaFile, NarDescript, NarLoader, Promise;
 
   if ((typeof require !== "undefined" && require !== null) && (typeof module !== "undefined" && module !== null)) {
     JSZip = require('jszip');
@@ -150,12 +150,12 @@
       var has_descript, has_install, ref;
       ref = arg != null ? arg : {}, has_install = ref.has_install, has_descript = ref.has_descript;
       if (this.files["install.txt"] != null) {
-        this.install = Descript.parse(this.files["install.txt"].toString());
+        this.install = NarDescript.parse(this.files["install.txt"].toString());
       } else if (has_install) {
         throw "install.txt not found";
       }
       if (this.files["descript.txt"] != null) {
-        return this.descript = Descript.parse(this.files["descript.txt"].toString());
+        return this.descript = NarDescript.parse(this.files["descript.txt"].toString());
       } else if (has_descript) {
         throw "descript.txt not found";
       }
@@ -295,43 +295,40 @@
 
   })();
 
-  Descript = {
-    parse: function (text){
-		// @arg String
-		// @ret {[id: String]: String;}
-		text = text.replace(/(?:\r\n|\r|\n)/g, "\n"); // CRLF->LF
-		while(true){// remove commentout
-			var match = (/(?:(?:^|\s)\/\/.*)|^\s+?$/g.exec(text) || ["",""])[0];
-			if(match.length === 0) break;
-			text = text.replace(match, "");
-		}
-		var lines = text.split("\n");
-		lines = lines.filter(function(line){ return line.length !== 0; }); // remove no content line
-		var dic = lines.reduce(function(dic, line){
-			var tmp = line.split(",");
-			var key = tmp[0];
-			var vals = tmp.slice(1);
-			key = key.trim();
-			var val = vals.join(",").trim();
-			dic[key] = val;
-			return dic;
-		}, {});
-		return dic;
-	}
-  };
+  NarDescript = (function() {
+    function NarDescript() {}
 
-  NarLoader.Descript = Descript;
+    NarDescript.parse = function(descript_str) {
+      var descript, descript_lines;
+      descript_lines = descript_str.replace(/(?:\r\n|\r|\n)/g, "\n").replace(/^\s*\/\/.*$/mg, "").replace(/\n+/g, "\n").replace(/\n$/, "").split(/\n/);
+      descript = {};
+      descript_lines.each(function(descript_line) {
+        var result;
+        result = descript_line.match(/^\s*([^,]+?)\s*,\s*(.+?)\s*$/);
+        if (!result) {
+          throw new Error("wrong descript definition : " + descript_line);
+        }
+        return descript[result[1]] = result[2];
+      });
+      return descript;
+    };
+
+    return NarDescript;
+
+  })();
 
   if ((typeof module !== "undefined" && module !== null ? module.exports : void 0) != null) {
     module.exports = {
       NarLoader: NarLoader,
       NanikaFile: NanikaFile,
-      NanikaDirectory: NanikaDirectory
+      NanikaDirectory: NanikaDirectory,
+      NarDescript: NarDescript
     };
   } else {
     this.NarLoader = NarLoader;
     this.NanikaFile = NanikaFile;
     this.NanikaDirectory = NanikaDirectory;
+    this.NarDescript = NarDescript;
   }
 
 }).call(this);

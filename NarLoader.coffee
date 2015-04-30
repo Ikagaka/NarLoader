@@ -73,11 +73,11 @@ class NanikaDirectory
 		@parse(options)
 	parse: ({has_install, has_descript}={})->
 		if @files["install.txt"]?
-			@install = Descript.parse(@files["install.txt"].toString())
+			@install = NarDescript.parse(@files["install.txt"].toString())
 		else if has_install
 			throw "install.txt not found"
 		if @files["descript.txt"]?
-			@descript = Descript.parse(@files["descript.txt"].toString())
+			@descript = NarDescript.parse(@files["descript.txt"].toString())
 		else if has_descript
 			throw "descript.txt not found"
 	asArrayBuffer: ->
@@ -153,35 +153,27 @@ class NanikaDirectory
 		canonical: (path) ->
 			path.replace(/\\/g, '/').replace(/^\.?\//, '').replace(/\/?$/, '')
 
-Descript =
-	parse: `function (text){
-		// @arg String
-		// @ret {[id: String]: String;}
-		text = text.replace(/(?:\r\n|\r|\n)/g, "\n"); // CRLF->LF
-		while(true){// remove commentout
-			var match = (/(?:(?:^|\s)\/\/.*)|^\s+?$/g.exec(text) || ["",""])[0];
-			if(match.length === 0) break;
-			text = text.replace(match, "");
-		}
-		var lines = text.split("\n");
-		lines = lines.filter(function(line){ return line.length !== 0; }); // remove no content line
-		var dic = lines.reduce(function(dic, line){
-			var tmp = line.split(",");
-			var key = tmp[0];
-			var vals = tmp.slice(1);
-			key = key.trim();
-			var val = vals.join(",").trim();
-			dic[key] = val;
-			return dic;
-		}, {});
-		return dic;
-	}`
+class NarDescript
+	@parse: (descript_str) ->
+		descript_lines = descript_str
+		.replace(/(?:\r\n|\r|\n)/g, "\n") # CRLF->LF
+		.replace(/^\s*\/\/.*$/mg, "") # remove commentout
+		.replace(/\n+/g, "\n") # remove empty lines
+		.replace(/\n$/, "") # remove last LF
+		.split(/\n/)
 
-NarLoader.Descript = Descript
+		descript = {}
+		descript_lines.each (descript_line) ->
+			result = descript_line.match /^\s*([^,]+?)\s*,\s*(.+?)\s*$/
+			unless result
+				throw new Error "wrong descript definition : #{descript_line}"
+			descript[result[1]] = result[2]
+		descript
 
 if module?.exports?
-	module.exports = NarLoader: NarLoader, NanikaFile: NanikaFile, NanikaDirectory: NanikaDirectory
+	module.exports = NarLoader: NarLoader, NanikaFile: NanikaFile, NanikaDirectory: NanikaDirectory, NarDescript: NarDescript
 else
 	@NarLoader = NarLoader
 	@NanikaFile = NanikaFile
 	@NanikaDirectory = NanikaDirectory
+	@NarDescript = NarDescript
