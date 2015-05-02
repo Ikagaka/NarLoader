@@ -164,7 +164,7 @@ class NarDescript
 
 		descript = {}
 		for descript_line in descript_lines
-			result = descript_line.match /^\s*([^,]+?)\s*,\s*(.+?)\s*$/
+			result = descript_line.match /^\s*([^,]+?)\s*,\s*(.*?)\s*$/
 			unless result
 				throw new Error "wrong descript definition : #{descript_line}"
 			descript[result[1]] = result[2]
