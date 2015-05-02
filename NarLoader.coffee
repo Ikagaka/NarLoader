@@ -163,7 +163,7 @@ class NarDescript
 		.split(/\n/)
 
 		descript = {}
-		descript_lines.each (descript_line) ->
+		for descript_line in descript_lines
 			result = descript_line.match /^\s*([^,]+?)\s*,\s*(.+?)\s*$/
 			unless result
 				throw new Error "wrong descript definition : #{descript_line}"

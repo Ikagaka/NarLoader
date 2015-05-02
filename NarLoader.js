@@ -299,17 +299,17 @@
     function NarDescript() {}
 
     NarDescript.parse = function(descript_str) {
-      var descript, descript_lines;
+      var descript, descript_line, descript_lines, i, len, result;
       descript_lines = descript_str.replace(/(?:\r\n|\r|\n)/g, "\n").replace(/^\s*\/\/.*$/mg, "").replace(/\n+/g, "\n").replace(/\n$/, "").split(/\n/);
       descript = {};
-      descript_lines.each(function(descript_line) {
-        var result;
+      for (i = 0, len = descript_lines.length; i < len; i++) {
+        descript_line = descript_lines[i];
         result = descript_line.match(/^\s*([^,]+?)\s*,\s*(.+?)\s*$/);
         if (!result) {
           throw new Error("wrong descript definition : " + descript_line);
         }
-        return descript[result[1]] = result[2];
-      });
+        descript[result[1]] = result[2];
+      }
       return descript;
     };
 
