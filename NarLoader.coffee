@@ -72,6 +72,14 @@ class NanikaDirectory
 				@files[path] = new NanikaFile(file)
 		@parse(options)
 	parse: ({has_install, has_descript}={})->
+		nowarp = Object.keys(this.files).filter (filePath)-> /^install\.txt/.exec(filePath)
+		wraped = Object.keys(this.files).filter (filePath)-> /^[^\/]+\/install\.txt/.exec(filePath)
+		if(nowarp.length is 0 and wraped.length is 1)
+			# ghostname/install.txt -> install.txt
+			_files = {}
+			Object.keys(this.files).forEach (filePath)=>
+				_files[filePath.split("/").slice(1).join("/")] = @files[filePath]
+			@files = _files
 		if @files["install.txt"]?
 			@install = NarDescript.parse(@files["install.txt"].toString())
 		else if has_install
