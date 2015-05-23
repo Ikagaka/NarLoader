@@ -35,17 +35,31 @@ class NarLoader
 		dir
 	@wget = (url, type) ->
 		new Promise (resolve, reject) =>
-			xhr = new XMLHttpRequest()
-			xhr.addEventListener "load", ->
-				if 200 <= xhr.status < 300
-					resolve xhr.response
-				else
+			if require? # node-webkit / node : fs access
+				fs = require 'fs'
+				fs.readFile url, (error, buffer) ->
+					if error
+						reject error
+					else
+						abuffer = new ArrayBuffer(buffer.length)
+						view = new Uint8Array(abuffer)
+						i = 0
+						while i < buffer.length
+							view[i] = buffer.readUInt8(i)
+							i++
+						resolve abuffer
+			else
+				xhr = new XMLHttpRequest()
+				xhr.addEventListener "load", ->
+					if 200 <= xhr.status < 300
+						resolve xhr.response
+					else
+						reject xhr.statusText
+				xhr.addEventListener "error", ->
 					reject xhr.statusText
-			xhr.addEventListener "error", ->
-				reject xhr.statusText
-			xhr.open("GET", url)
-			xhr.responseType = type
-			xhr.send()
+				xhr.open("GET", url)
+				xhr.responseType = type
+				xhr.send()
 
 class NanikaFile
 	constructor: (@_buffer) ->
