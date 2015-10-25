@@ -149,7 +149,7 @@ class NanikaDirectory
 			elempathre = @pathToRegExp(elempath)
 			Object.keys(@files)
 			.filter (path) -> elempathre.test path
-			.forEach (path) ->
+			.forEach (path) =>
 				directory[path] = @files[path]
 		new NanikaDirectory directory, options
 	removeElements: (elempaths, options) ->
