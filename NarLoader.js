@@ -95,7 +95,8 @@
                 return reject(xhr.statusText);
               }
             });
-            xhr.addEventListener("error", function() {
+            xhr.addEventListener("error", function(err) {
+              console.error(err, err.stack, xhr);
               return reject(xhr.statusText);
             });
             xhr.open("GET", url);

@@ -55,7 +55,8 @@ class NarLoader
 						resolve xhr.response
 					else
 						reject xhr.statusText
-				xhr.addEventListener "error", ->
+				xhr.addEventListener "error", (err)->
+					console.error err, err.stack, xhr
 					reject xhr.statusText
 				xhr.open("GET", url)
 				xhr.responseType = type
