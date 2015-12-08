@@ -26,7 +26,8 @@
       return new Promise((function(_this) {
         return function(resolve, reject) {
           return resolve(new NanikaDirectory(NarLoader.unzip(buffer), {
-            has_install: true
+            has_install: true,
+            is_rootDir: true
           }));
         };
       })(this));
@@ -167,23 +168,25 @@
     }
 
     NanikaDirectory.prototype.parse = function(arg) {
-      var has_descript, has_install, nowarp, ref, wraped;
-      ref = arg != null ? arg : {}, has_install = ref.has_install, has_descript = ref.has_descript;
-      nowarp = Object.keys(this.files).filter(function(filePath) {
-        return /^install\.txt/.exec(filePath);
-      });
-      wraped = Object.keys(this.files).filter(function(filePath) {
-        return /^[^\/]+\/install\.txt/.exec(filePath);
-      });
-
-      /*
-      		if(nowarp.length is 0 and wraped.length is 1)
-      			 * ghostname/install.txt -> install.txt
-      			_files = {}
-      			Object.keys(this.files).forEach (filePath)=>
-      				_files[filePath.split("/").slice(1).join("/")] = @files[filePath]
-      			@files = _files
-       */
+      var _files, has_descript, has_install, is_rootDir, nowarp, ref, wraped;
+      ref = arg != null ? arg : {}, has_install = ref.has_install, has_descript = ref.has_descript, is_rootDir = ref.is_rootDir;
+      if (is_rootDir) {
+        nowarp = Object.keys(this.files).filter(function(filePath) {
+          return /^install\.txt/.exec(filePath);
+        });
+        wraped = Object.keys(this.files).filter(function(filePath) {
+          return /^[^\/]+\/install\.txt/.exec(filePath);
+        });
+        if (nowarp.length === 0 && wraped.length === 1) {
+          _files = {};
+          Object.keys(this.files).forEach((function(_this) {
+            return function(filePath) {
+              return _files[filePath.split("/").slice(1).join("/")] = _this.files[filePath];
+            };
+          })(this));
+          this.files = _files;
+        }
+      }
       if (this.files["install.txt"] != null) {
         this.install = NarDescript.parse(this.files["install.txt"].toString());
       } else if (has_install) {
