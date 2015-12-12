@@ -167,34 +167,32 @@
     }
 
     NanikaDirectory.prototype.parse = function(arg) {
-      var has_descript, has_install, nowarp, ref, wraped;
-      ref = arg != null ? arg : {}, has_install = ref.has_install, has_descript = ref.has_descript;
+      var _files, do_throw_descript, has_descript, has_install, nowarp, ref, wraped;
+      ref = arg != null ? arg : {}, has_install = ref.has_install, has_descript = ref.has_descript, do_throw_descript = ref.do_throw_descript;
       nowarp = Object.keys(this.files).filter(function(filePath) {
         return /^install\.txt/.exec(filePath);
       });
       wraped = Object.keys(this.files).filter(function(filePath) {
         return /^[^\/]+\/install\.txt/.exec(filePath);
       });
-
-      /*
-      		if(nowarp.length is 0 and wraped.length is 1)
-      			 * ghostname/install.txt -> install.txt
-      			_files = {}
-      			Object.keys(this.files).forEach (filePath)=>
-      				_files[filePath.split("/").slice(1).join("/")] = @files[filePath]
-      			@files = _files
-       */
+      if (nowarp.length === 0 && wraped.length === 1) {
+        _files = {};
+        Object.keys(this.files).forEach((function(_this) {
+          return function(filePath) {
+            return _files[filePath.split("/").slice(1).join("/")] = _this.files[filePath];
+          };
+        })(this));
+        this.files = _files;
+      }
       if (this.files["install.txt"] != null) {
-        this.install = NarDescript.parse(this.files["install.txt"].toString());
+        this.install = NarDescript.parse(this.files["install.txt"].toString(), do_throw_descript);
       } else if (has_install) {
-        console.warn("install.txt not found");
-        this.install = {};
+        throw "install.txt not found";
       }
       if (this.files["descript.txt"] != null) {
-        return this.descript = NarDescript.parse(this.files["descript.txt"].toString());
+        return this.descript = NarDescript.parse(this.files["descript.txt"].toString(), do_throw_descript);
       } else if (has_descript) {
-        console.warn("descript.txt not found");
-        return this.descript = {};
+        throw "descript.txt not found";
       }
     };
 
@@ -337,19 +335,27 @@
   NarDescript = (function() {
     function NarDescript() {}
 
-    NarDescript.parse = function(descript_str) {
-      var descript, descript_line, descript_lines, j, len, result;
-      descript_lines = descript_str.replace(/(?:\r\n|\r|\n)/g, "\n").replace(/^\s*\/\/.*$/mg, "").replace(/\n+/g, "\n").replace(/\n$/, "").split(/\n/);
+    NarDescript.parse = function(descript_str, do_throw) {
+      var descript, descript_line, descript_lines, errors, j, len, result;
+      descript_lines = descript_str.replace(/(?:\r\n|\r|\n)/g, "\n").replace(/^\s*\/\/.*$/mg, "").split(/\n/);
+      errors = [];
       descript = {};
       for (j = 0, len = descript_lines.length; j < len; j++) {
         descript_line = descript_lines[j];
+        if (descript_line.length === 0) {
+          continue;
+        }
         result = descript_line.match(/^\s*([^,]+?)\s*,\s*(.*?)\s*$/);
         if (!result) {
-          console.error("wrong descript definition : " + descript_line);
-          return descript;
+          errors.push("wrong descript definition : " + descript_line);
+          continue;
         }
         descript[result[1]] = result[2];
       }
+      if (do_throw) {
+        throw new Error(errors.join('\n'));
+      }
+      descript._errors = errors;
       return descript;
     };
 
