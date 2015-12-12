@@ -81,6 +81,7 @@ directory object that has filepath hash of NanikaFile or NanikaFile's buffer typ
 
 - **has_install** [Boolean] if true: throw if dir does not have "install.txt"
 - **has_descript** [Boolean] if true: throw if dir does not have "descript.txt"
+- **do_throw_descript** [Boolean] if true: throw if parse was failed
 
 ## files
 
@@ -225,11 +226,12 @@ internal
 
 parse descript.txt format
 
-## parse(text)
+## parse(text, do_throw)
 
 ### param
 
 - **descript_str** [string] descript.txt format string
+- **do_throw** [Boolean] if true: throw if parse was failed
 
 ### return
 
