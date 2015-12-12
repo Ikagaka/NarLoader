@@ -337,10 +337,13 @@
 
     NarDescript.parse = function(descript_str) {
       var descript, descript_line, descript_lines, j, len, result;
-      descript_lines = descript_str.replace(/(?:\r\n|\r|\n)/g, "\n").replace(/^\s*\/\/.*$/mg, "").replace(/\n+/g, "\n").replace(/\n$/, "").split(/\n/);
+      descript_lines = descript_str.replace(/(?:\r\n|\r|\n)/g, "\n").replace(/^\s*\/\/.*$/mg, "").split(/\n/);
       descript = {};
       for (j = 0, len = descript_lines.length; j < len; j++) {
         descript_line = descript_lines[j];
+        if (descript_line.length === 0) {
+          continue;
+        }
         result = descript_line.match(/^\s*([^,]+?)\s*,\s*(.*?)\s*$/);
         if (!result) {
           throw new Error("wrong descript definition : " + descript_line);

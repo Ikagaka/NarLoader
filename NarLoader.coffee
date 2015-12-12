@@ -181,12 +181,12 @@ class NarDescript
 		descript_lines = descript_str
 		.replace(/(?:\r\n|\r|\n)/g, "\n") # CRLF->LF
 		.replace(/^\s*\/\/.*$/mg, "") # remove commentout
-		.replace(/\n+/g, "\n") # remove empty lines
-		.replace(/\n$/, "") # remove last LF
 		.split(/\n/)
 
 		descript = {}
 		for descript_line in descript_lines
+			if descript_line.length == 0
+				continue
 			result = descript_line.match /^\s*([^,]+?)\s*,\s*(.*?)\s*$/
 			unless result
 				throw new Error "wrong descript definition : #{descript_line}"
