@@ -237,4 +237,4 @@ parse descript.txt format
 
 [{[key:string]: string;}] key-value Object
 
-this will have "_error" key if parse was failed
+this will have "_errors" key if parse was failed
