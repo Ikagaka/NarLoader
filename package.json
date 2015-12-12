@@ -1,6 +1,6 @@
 {
 	"name": "narloader",
-	"version": "0.6.0",
+	"version": "0.6.1",
 	"description": "NarLoader - Nanika ARchive Loader",
 	"keywords": ["nar", "ukagaka"],
 	"main": "NarLoader.js",
