@@ -86,7 +86,7 @@ class NanikaDirectory
       else
         @files[path] = new NanikaFile(file)
     @parse(options)
-  parse: ({has_install, has_descript}={})->
+  parse: ({has_install, has_descript, do_throw_descript}={})->
     nowarp = Object.keys(this.files).filter (filePath)-> /^install\.txt/.exec(filePath)
     wraped = Object.keys(this.files).filter (filePath)-> /^[^\/]+\/install\.txt/.exec(filePath)
     if(nowarp.length is 0 and wraped.length is 1)
@@ -96,11 +96,11 @@ class NanikaDirectory
         _files[filePath.split("/").slice(1).join("/")] = @files[filePath]
       @files = _files
     if @files["install.txt"]?
-      @install = NarDescript.parse(@files["install.txt"].toString())
+      @install = NarDescript.parse(@files["install.txt"].toString(), do_throw_descript)
     else if has_install
       throw "install.txt not found"
     if @files["descript.txt"]?
-      @descript = NarDescript.parse(@files["descript.txt"].toString())
+      @descript = NarDescript.parse(@files["descript.txt"].toString(), do_throw_descript)
     else if has_descript
       throw "descript.txt not found"
   asArrayBuffer: ->
@@ -177,20 +177,25 @@ class NanikaDirectory
       path.replace(/\\/g, '/').replace(/^\.?\//, '').replace(/\/?$/, '')
 
 class NarDescript
-  @parse: (descript_str) ->
+  @parse: (descript_str, do_throw) ->
     descript_lines = descript_str
     .replace(/(?:\r\n|\r|\n)/g, "\n") # CRLF->LF
     .replace(/^\s*\/\/.*$/mg, "") # remove commentout
     .split(/\n/)
 
+    errors = []
     descript = {}
     for descript_line in descript_lines
       if descript_line.length == 0
         continue
       result = descript_line.match /^\s*([^,]+?)\s*,\s*(.*?)\s*$/
       unless result
-        throw new Error "wrong descript definition : #{descript_line}"
+        errors.push "wrong descript definition : #{descript_line}"
+        continue
       descript[result[1]] = result[2]
+    if do_throw
+      throw new Error errors.join '\n'
+    descript._errors = errors
     descript
 
 if module?.exports?
