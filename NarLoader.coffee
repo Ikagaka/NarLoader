@@ -14,7 +14,7 @@ else
 class NarLoader
   @loadFromBuffer: (buffer) ->
     new Promise (resolve, reject) =>
-      resolve new NanikaDirectory(NarLoader.unzip(buffer), has_install: true)
+      resolve new NanikaDirectory(NarLoader.unzip(buffer), {has_install: true, is_root_dir: true})
   @loadFromURL: (src) ->
     NarLoader.wget src, "arraybuffer"
     .then @loadFromBuffer
@@ -86,15 +86,16 @@ class NanikaDirectory
       else
         @files[path] = new NanikaFile(file)
     @parse(options)
-  parse: ({has_install, has_descript, do_throw_descript}={})->
-    nowarp = Object.keys(this.files).filter (filePath)-> /^install\.txt/.exec(filePath)
-    wraped = Object.keys(this.files).filter (filePath)-> /^[^\/]+\/install\.txt/.exec(filePath)
-    if(nowarp.length is 0 and wraped.length is 1)
-      # ghostname/install.txt -> install.txt
-      _files = {}
-      Object.keys(this.files).forEach (filePath)=>
-        _files[filePath.split("/").slice(1).join("/")] = @files[filePath]
-      @files = _files
+  parse: ({has_install, has_descript, do_throw_descript, is_root_dir}={})->
+    if is_root_dir
+      nowarp = Object.keys(this.files).filter (filePath)-> /^install\.txt/.exec(filePath)
+      wraped = Object.keys(this.files).filter (filePath)-> /^[^\/]+\/install\.txt/.exec(filePath)
+      if(nowarp.length is 0 and wraped.length is 1)
+        # ghostname/install.txt -> install.txt
+        _files = {}
+        Object.keys(this.files).forEach (filePath)=>
+          _files[filePath.split("/").slice(1).join("/")] = @files[filePath]
+        @files = _files
     if @files["install.txt"]?
       @install = NarDescript.parse(@files["install.txt"].toString(), do_throw_descript)
     else if has_install
