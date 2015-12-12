@@ -187,14 +187,12 @@
       if (this.files["install.txt"] != null) {
         this.install = NarDescript.parse(this.files["install.txt"].toString());
       } else if (has_install) {
-        console.warn("install.txt not found");
-        this.install = {};
+        throw "install.txt not found";
       }
       if (this.files["descript.txt"] != null) {
         return this.descript = NarDescript.parse(this.files["descript.txt"].toString());
       } else if (has_descript) {
-        console.warn("descript.txt not found");
-        return this.descript = {};
+        throw "descript.txt not found";
       }
     };
 
@@ -345,8 +343,7 @@
         descript_line = descript_lines[j];
         result = descript_line.match(/^\s*([^,]+?)\s*,\s*(.*?)\s*$/);
         if (!result) {
-          console.error("wrong descript definition : " + descript_line);
-          return descript;
+          throw new Error("wrong descript definition : " + descript_line);
         }
         descript[result[1]] = result[2];
       }

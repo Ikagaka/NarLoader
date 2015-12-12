@@ -98,13 +98,11 @@ class NanikaDirectory
 		if @files["install.txt"]?
 			@install = NarDescript.parse(@files["install.txt"].toString())
 		else if has_install
-			console.warn "install.txt not found"
-			@install = {}
+			throw "install.txt not found"
 		if @files["descript.txt"]?
 			@descript = NarDescript.parse(@files["descript.txt"].toString())
 		else if has_descript
-			console.warn "descript.txt not found"
-			@descript = {}
+			throw "descript.txt not found"
 	asArrayBuffer: ->
 		directory = {}
 		for path, file of @files
@@ -191,8 +189,7 @@ class NarDescript
 		for descript_line in descript_lines
 			result = descript_line.match /^\s*([^,]+?)\s*,\s*(.*?)\s*$/
 			unless result
-				console.error "wrong descript definition : #{descript_line}"
-				return descript
+				throw new Error "wrong descript definition : #{descript_line}"
 			descript[result[1]] = result[2]
 		descript
 
