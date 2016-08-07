@@ -11,11 +11,11 @@
     if (typeof Promise === "undefined" || Promise === null) {
       Promise = require('bluebird');
     }
-  } else {
-    JSZip = this.JSZip;
-    Encoding = this.Encoding;
+  } else if (typeof window !== "undefined" && window !== null) {
+    JSZip = window.JSZip;
+    Encoding = window.Encoding;
     if (Promise == null) {
-      Promise = this.Promise;
+      Promise = window.Promise;
     }
   }
 
@@ -373,11 +373,11 @@
       NanikaDirectory: NanikaDirectory,
       NarDescript: NarDescript
     };
-  } else {
-    this.NarLoader = NarLoader;
-    this.NanikaFile = NanikaFile;
-    this.NanikaDirectory = NanikaDirectory;
-    this.NarDescript = NarDescript;
+  } else if (typeof window !== "undefined" && window !== null) {
+    window.NarLoader = NarLoader;
+    window.NanikaFile = NanikaFile;
+    window.NanikaDirectory = NanikaDirectory;
+    window.NarDescript = NarDescript;
   }
 
 }).call(this);

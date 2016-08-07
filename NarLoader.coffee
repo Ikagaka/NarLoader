@@ -5,11 +5,11 @@ if require? and module?
   Encoding = require('encoding-japanese')
   unless Promise?
     Promise = require('bluebird')
-else
-  JSZip = @JSZip
-  Encoding = @Encoding
+else if window?
+  JSZip = window.JSZip
+  Encoding = window.Encoding
   unless Promise?
-    Promise = @Promise
+    Promise = window.Promise
 
 class NarLoader
   @loadFromBuffer: (buffer) ->
@@ -201,8 +201,8 @@ class NarDescript
 
 if module?.exports?
   module.exports = NarLoader: NarLoader, NanikaFile: NanikaFile, NanikaDirectory: NanikaDirectory, NarDescript: NarDescript
-else
-  @NarLoader = NarLoader
-  @NanikaFile = NanikaFile
-  @NanikaDirectory = NanikaDirectory
-  @NarDescript = NarDescript
+else if window?
+  window.NarLoader = NarLoader
+  window.NanikaFile = NanikaFile
+  window.NanikaDirectory = NanikaDirectory
+  window.NarDescript = NarDescript
