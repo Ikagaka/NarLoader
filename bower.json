@@ -3,7 +3,7 @@
 	"description": "NarLoader - Nanika ARchive Loader",
 	"main": "NarLoader.js",
 	"dependencies": {
-		"jszip": ">= 2.0.0",
+		"jszip": "Stuk/jszip#v2.x",
 		"encoding-japanese": "polygonplanet/encoding.js#master",
 		"bluebird": ">= 2.3.11"
 	},
