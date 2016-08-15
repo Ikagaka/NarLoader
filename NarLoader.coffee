@@ -35,7 +35,7 @@ class NarLoader
     dir
   @wget = (url, type) ->
     new Promise (resolve, reject) =>
-      if require? # node-webkit / node : fs access
+      if require? and process? and !process.browser # node-webkit / node : fs access
         fs = require 'fs'
         fs.readFile url, (error, buffer) ->
           if error

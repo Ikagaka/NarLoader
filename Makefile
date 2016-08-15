@@ -56,3 +56,6 @@ cov: $(LIB_TARGETS) $(TEST_TARGETS_JS)
 
 .jade.html:
 	$(JADE) -P $^
+
+dist/NarLoader.js:
+	browserify NarLoader.js --outfile dist/NarLoader.js --standalone NarLoader

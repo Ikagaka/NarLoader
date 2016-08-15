@@ -69,7 +69,7 @@
       return new Promise((function(_this) {
         return function(resolve, reject) {
           var fs, xhr;
-          if (typeof require !== "undefined" && require !== null) {
+          if ((typeof require !== "undefined" && require !== null) && (typeof process !== "undefined" && process !== null) && !process.browser) {
             fs = require('fs');
             return fs.readFile(url, function(error, buffer) {
               var abuffer, i, view;
