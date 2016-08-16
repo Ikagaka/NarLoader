@@ -54,7 +54,9 @@
       zip = new JSZip();
       return zip.loadAsync(buffer).then(function(zip) {
         var pairs, proms;
-        pairs = Object.keys(zip.files).map(function(filename) {
+        pairs = Object.keys(zip.files).filter(function(filename) {
+          return filename !== null;
+        }).map(function(filename) {
           return {
             filename: filename,
             zipped: zip.file(filename)

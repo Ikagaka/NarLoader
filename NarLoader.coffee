@@ -29,7 +29,9 @@ class NarLoader
     zip = new JSZip()
     zip.loadAsync(buffer)
     .then (zip)->
-      pairs = Object.keys(zip.files).map (filename)-> {filename, zipped: zip.file(filename)} 
+      pairs = Object.keys(zip.files)
+      .filter (filename)-> filename != null # ghost/ のようにディレクトリがzip対象となっていて filename が null なものがある
+      .map (filename)-> {filename, zipped: zip.file(filename)} 
       proms = pairs.map ({filename, zipped})->
         zipped.async("arraybuffer")
         .then (unzipped)-> {filename, unzipped}
