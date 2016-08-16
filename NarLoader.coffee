@@ -13,8 +13,8 @@ else if window?
 
 class NarLoader
   @loadFromBuffer: (buffer) ->
-    new Promise (resolve, reject) =>
-      resolve new NanikaDirectory(NarLoader.unzip(buffer), {has_install: true, is_root_dir: true})
+    NarLoader.unzip(buffer).then (dir)->
+      new NanikaDirectory(dir, {has_install: true, is_root_dir: true})
   @loadFromURL: (src) ->
     NarLoader.wget src, "arraybuffer"
     .then @loadFromBuffer
@@ -27,12 +27,22 @@ class NarLoader
     .then @loadFromBuffer
   @unzip = (buffer) ->
     zip = new JSZip()
-    zip.load(buffer, checkCRC32: true)
-    dir = {}
-    for filePath of zip.files
-      path = filePath.split("\\").join("/")
-      dir[path] = new NanikaFile(zip.files[filePath])
-    dir
+    zip.loadAsync(buffer)
+    .then (zip)->
+      pairs = Object.keys(zip.files).map (filename)-> {filename, zipped: zip.file(filename)} 
+      proms = pairs.map ({filename, zipped})->
+        zipped.async("arraybuffer")
+        .then (unzipped)-> {filename, unzipped}
+      return Promise.all(proms)
+    .then (pairs)->
+      dic = pairs.reduce ((o, {filename, unzipped})-> o[filename] = unzipped; o), {}
+      return dic
+    .then (files)->
+      dir = {}
+      for filePath of files
+        path = filePath.split("\\").join("/")
+        dir[path] = new NanikaFile(files[filePath])
+      dir
   @wget = (url, type) ->
     new Promise (resolve, reject) =>
       if require? and process? and !process.browser # node-webkit / node : fs access
