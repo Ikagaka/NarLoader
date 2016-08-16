@@ -3166,13 +3166,15 @@ function hasOwnProperty(obj, prop) {
       zip = new JSZip();
       return zip.loadAsync(buffer).then(function(zip) {
         var pairs, proms;
-        pairs = Object.keys(zip.files).filter(function(filename) {
-          return filename != null;
-        }).map(function(filename) {
+        pairs = Object.keys(zip.files).map(function(filename) {
           return {
             filename: filename,
             zipped: zip.file(filename)
           };
+        }).filter(function(arg) {
+          var zipped;
+          zipped = arg.zipped;
+          return zipped != null;
         });
         proms = pairs.map(function(arg) {
           var filename, zipped;

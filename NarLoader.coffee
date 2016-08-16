@@ -30,8 +30,8 @@ class NarLoader
     zip.loadAsync(buffer)
     .then (zip)->
       pairs = Object.keys(zip.files)
-      .filter (filename)-> filename? # ghost/ のようにディレクトリがzip対象となっていて filename が null なものがある
-      .map (filename)-> {filename, zipped: zip.file(filename)} 
+      .map (filename)-> {filename, zipped: zip.file(filename)}
+      .filter ({zipped})-> zipped? # filename が ghost/ のようにディレクトリがzip対象となっていて zipped が null なものがあるので取り除く 
       proms = pairs.map ({filename, zipped})->
         zipped.async("arraybuffer")
         .then (unzipped)-> {filename, unzipped}
