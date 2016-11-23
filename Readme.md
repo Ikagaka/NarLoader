@@ -6,35 +6,56 @@ NarLoader - Nanika ARchive Loader
 Installation
 --------------------------
 
-    npm install narloader
-
-    bower install narloader
-
-If you want to use Promise in a environment not having build-in Promise, 'bluebird' required.
+```
+npm install narloader
+```
 
 Usage
 --------------------------
 
-    var NarLoader = require('narloader').NarLoader;
-    var buffer = (nar data ArrayBuffer);
-    var directory = NarLoader.loadFromBuffer(buffer);
+```typescript
+import {NarLoader} from "narloader";
+const buffer = (nar data ArrayBuffer);
+NarLoader.loadFromBuffer(buffer).then((directory) => ...);
+```
 
 or use this on the browsers ...
 
-    <script src="jszip.js"></script>
-    <script src="encoding.js"></script>
-    <script src="bluebird.js"></script>
-    <script src="NarLoader.js"></script>
-    ...
-    var buffer = (nar data ArrayBuffer);
-    var directory = NarLoader.loadFromBuffer(buffer);
+```html
+<script src="NarLoader.js"></script>
+<script>
+var buffer = (nar data ArrayBuffer);
+narLoader.NarLoader.loadFromBuffer(buffer).then(function(directory) {...});
+</script>
+```
 
 API
 --------------------------
 
-see [API Document](api.md)
+```typescript
+/** Nanika ARchive Loader */
+export class NarLoader {
+  /**
+   * load nar from path
+   * @param narPath nar file path
+   */
+  static async loadFromPath(narPath: string): Promise<NanikaContainerSyncDirectory>;
+
+  /**
+   * load nar from URI
+   * @param narUri nar file URI
+   */
+  static async loadFromURI(narUri: URL | string): Promise<NanikaContainerSyncDirectory>;
+
+  /**
+   * load nar from buffer
+   * @param nar nar file buffer
+   */
+  static async loadFromBuffer(nar: string | ArrayBuffer | Uint8Array | Buffer | Blob): Promise<NanikaContainerSyncDirectory>;
+}
+```
 
 License
 --------------------------
 
-This is released under [MIT License](http://narazaka.net/license/MIT?2014).
+This is released under [MIT License](http://narazaka.net/license/MIT?2016).

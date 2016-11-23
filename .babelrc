@@ -1,0 +1,15 @@
+{
+  "presets": [
+    "latest"
+  ],
+  "plugins": [
+    "transform-runtime"
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        "power-assert"
+      ]
+    }
+  }
+}
