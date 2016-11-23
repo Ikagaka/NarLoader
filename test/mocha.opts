@@ -1,0 +1,6 @@
+--compilers ts:ts-node/register
+--compilers js:babel-register
+--require espower-ts-node
+--recursive
+test/*.js
+test/*.ts
