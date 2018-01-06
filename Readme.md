@@ -1,6 +1,8 @@
 NarLoader - Nanika ARchive Loader
 ==========================
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/Ikagaka/NarLoader.svg)](https://greenkeeper.io/)
+
 [Nanika ARchive](http://usada.sakura.vg/contents/install.html) (*.nar) loader
 
 Installation
