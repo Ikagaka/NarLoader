@@ -12,6 +12,8 @@
     "dist"
   ],
   "scripts": {
+    "prepare": "npm run dist",
+    "prepublishOnly": "npm run lint && npm run test",
     "dist": "shx rm -rf dist && tsc",
     "lint": "npm run tslint",
     "tslint": "tslint -p .",
