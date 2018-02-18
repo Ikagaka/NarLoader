@@ -1,5 +1,7 @@
 /// <reference types="node" />
 
+/** Nanika ARchive Loader */
+
 import * as fs from "fs";
 import {FileSystemObject} from "fso";
 import * as JSZip from "jszip";
@@ -9,68 +11,66 @@ import {
 } from "nanika-storage";
 import * as path from "path";
 
-/** Nanika ARchive Loader */
-export class NarLoader {
-  /**
-   * load nar from path
-   * @param narPath nar file path
-   */
-  static async loadFromPath(narPath: string) {
-    const buffer = (await new FileSystemObject(narPath).readFile());
-    return NarLoader.loadFromBuffer(buffer);
-  }
+/**
+ * load nar from path
+ * @param narPath nar file path
+ */
+export async function loadFromPath(narPath: string) {
+  const buffer = (await new FileSystemObject(narPath).readFile());
+  return loadFromBuffer(buffer);
+}
 
-  /**
-   * load nar from URI
-   * @param narUri nar file URI
-   */
-  static async loadFromURI(narUri: URL | string) {
-    const buffer = await new Promise<ArrayBuffer>((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = () => {
-        if (200 <= xhr.status && xhr.status < 300) {
-          resolve(xhr.response);
-        } else {
-          reject(xhr.statusText);
-        }
-      };
-      xhr.onerror = (error) => reject(error);
-      xhr.responseType = "arraybuffer";
-      xhr.open("GET", narUri as string);
-      xhr.send();
-    });
-    return NarLoader.loadFromBuffer(buffer);
-  }
-
-  /**
-   * load nar from buffer
-   * @param nar nar file buffer
-   */
-  static async loadFromBuffer(nar: string | ArrayBuffer | Uint8Array | Buffer | Blob) {
-    const zip = new JSZip();
-    await zip.loadAsync(nar, {createFolders: true});
-    const entries: JSZip.JSZipObject[] = [];
-    zip.forEach((_, entry) => entries.push(entry));
-    const children = await Promise.all(entries.map(async (entry) => {
-      const content = await entry.async("nodebuffer") as Buffer;
-      const stats = new NarLoaderStats(entry, content.byteLength);
-      return new NanikaContainerSyncFile(path.normalize(entry.name), content, stats);
-    }));
-    const dir = new NanikaContainerSyncDirectory("", children);
-    // トップレベルがフォルダになっているZIP対策
-    if (dir.new("install.txt").existsSync()) {
-      const installTxt = dir.childrenAllSync().find((entry) => entry.basename().toString() === "install.txt");
-      if (installTxt) {
-        return dir.new(installTxt.dirname().toString()) as NanikaContainerSyncDirectory;
+/**
+ * load nar from URI
+ * @param narUri nar file URI
+ */
+export async function loadFromURI(narUri: URL | string) {
+  const buffer = await new Promise<ArrayBuffer>((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+      if (200 <= xhr.status && xhr.status < 300) {
+        resolve(xhr.response);
+      } else {
+        reject(xhr.statusText);
       }
+    };
+    xhr.onerror = (error) => reject(error);
+    xhr.responseType = "arraybuffer";
+    xhr.open("GET", narUri as string);
+    xhr.send();
+  });
+  return loadFromBuffer(buffer);
+}
+
+/**
+ * load nar from buffer
+ * @param nar nar file buffer
+ */
+export async function loadFromBuffer(nar: string | ArrayBuffer | Uint8Array | Buffer | Blob) {
+  const zip = new JSZip();
+  await zip.loadAsync(nar, {createFolders: true});
+  const entries: JSZip.JSZipObject[] = [];
+  zip.forEach((_, entry) => entries.push(entry));
+  const children = await Promise.all(entries.map(async (entry) => {
+    const content = await entry.async("nodebuffer") as Buffer;
+    const stats = new NarLoaderStats(entry, content.byteLength);
+    return new NanikaContainerSyncFile(path.normalize(entry.name), content, stats);
+  }));
+  const dir = new NanikaContainerSyncDirectory("", children);
+  // トップレベルがフォルダになっているZIP対策
+  if (dir.new("install.txt").existsSync()) {
+    const installTxt = dir.childrenAllSync().find((entry) => entry.basename().toString() === "install.txt");
+    if (installTxt) {
+      return dir.new(installTxt.dirname().toString()) as NanikaContainerSyncDirectory;
     }
-    return dir;
   }
+  return dir;
 }
 
 const S_IFREG = 0o100000;
 const S_IFDIR = 0o40000;
 
+/** emulate node.js stats */
 export class NarLoaderStats implements fs.Stats {
   dev = 0;
   ino = 0;
