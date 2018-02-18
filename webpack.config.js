@@ -43,7 +43,7 @@ module.exports = {
     Buffer: false,
   },
   plugins: [
-      new webpack.ProvidePlugin({BrowserFS: "bfsGlobal", process: "processGlobal", Buffer: "bufferGlobal"}),
+    new webpack.ProvidePlugin({BrowserFS: "bfsGlobal", process: "processGlobal", Buffer: "bufferGlobal"}),
   ],
   devtool: "source-map",
 };
