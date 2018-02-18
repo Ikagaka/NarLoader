@@ -21,15 +21,9 @@ const buffer = (nar data ArrayBuffer);
 NarLoader.loadFromBuffer(buffer).then((directory) => ...);
 ```
 
-or use this on the browsers ...
+### on browser
 
-```html
-<script src="NarLoader.js"></script>
-<script>
-var buffer = (nar data ArrayBuffer);
-narLoader.NarLoader.loadFromBuffer(buffer).then(function(directory) {...});
-</script>
-```
+You can bundle NarLoader by webpack / browserify with [BrowserFS](https://github.com/jvilk/BrowserFS#using-with-browserify-and-webpack)' instruction.
 
 API
 --------------------------
@@ -60,4 +54,4 @@ export class NarLoader {
 License
 --------------------------
 
-This is released under [MIT License](http://narazaka.net/license/MIT?2016).
+This is released under [MIT License](http://narazaka.net/license/MIT?2018).
