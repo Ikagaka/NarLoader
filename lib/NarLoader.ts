@@ -54,11 +54,13 @@ export async function loadFromBuffer(nar: string | ArrayBuffer | Uint8Array | Bu
   const children = await Promise.all(entries.map(async (entry) => {
     const content = await entry.async("nodebuffer") as Buffer;
     const stats = new NarLoaderStats(entry, content.byteLength);
-    return new NanikaContainerSyncFile(path.normalize(entry.name), content, stats);
+    const name = path.normalize(entry.dir ? entry.name.replace(/[\\\/]$/, "") : entry.name);
+    return new NanikaContainerSyncFile(name, content, stats);
   }));
   const dir = new NanikaContainerSyncDirectory("", children);
   // トップレベルがフォルダになっているZIP対策
-  if (dir.new("install.txt").existsSync()) {
+  if (!dir.new("install.txt").existsSync() &&
+    dir.childrenAllSync().find(child => child.basename().path === "install.txt")) {
     const installTxt = dir.childrenAllSync().find((entry) => entry.basename().toString() === "install.txt");
     if (installTxt) {
       return dir.new(installTxt.dirname().toString()) as NanikaContainerSyncDirectory;
