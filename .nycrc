@@ -1,6 +1,6 @@
 {
   "include": [
-    "src/**/*.ts"
+    "lib/**/*.ts"
   ],
   "exclude": [
     "node_modules",
@@ -10,14 +10,10 @@
     ".js",
     ".ts"
   ],
-  "require": [
-    "ts-node/register",
-    "babel-register"
-  ],
   "reporter": [
     "lcov",
     "html",
-    "text"
-  ],
-  "all": true
+    "text",
+    "text-summary"
+  ]
 }

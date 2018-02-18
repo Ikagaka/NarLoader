@@ -4,7 +4,7 @@ node_modules
 bower_components
 npm-debug.log
 yarn-error.log
+yarn.lock
 coverage
 .nyc_output
 dist
-web

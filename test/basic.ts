@@ -1,7 +1,7 @@
 /// <reference types="mocha" />
 import * as JSZip from "jszip";
 import * as assert from "power-assert";
-import {NarLoader} from "../src/lib/NarLoader";
+import {NarLoader} from "../lib/NarLoader";
 
 const descript = `
 charset,UTF-8

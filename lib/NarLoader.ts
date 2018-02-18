@@ -36,7 +36,7 @@ export class NarLoader {
       };
       xhr.onerror = (error) => reject(error);
       xhr.responseType = "arraybuffer";
-      xhr.open("GET", <string> narUri);
+      xhr.open("GET", narUri as string);
       xhr.send();
     });
     return NarLoader.loadFromBuffer(buffer);
@@ -49,10 +49,10 @@ export class NarLoader {
   static async loadFromBuffer(nar: string | ArrayBuffer | Uint8Array | Buffer | Blob) {
     const zip = new JSZip();
     await zip.loadAsync(nar, {createFolders: true});
-    const entries: JSZipObject[] = [];
+    const entries: JSZip.JSZipObject[] = [];
     zip.forEach((_, entry) => entries.push(entry));
     const children = await Promise.all(entries.map(async (entry) => {
-      const content = <Buffer> await entry.async("nodebuffer");
+      const content = await entry.async("nodebuffer") as Buffer;
       const stats = new NarLoaderStats(entry, content.byteLength);
       return new NanikaContainerSyncFile(path.normalize(entry.name), content, stats);
     }));
@@ -61,7 +61,7 @@ export class NarLoader {
     if (dir.new("install.txt").existsSync()) {
       const installTxt = dir.childrenAllSync().find((entry) => entry.basename().toString() === "install.txt");
       if (installTxt) {
-        return <NanikaContainerSyncDirectory> dir.new(installTxt.dirname().toString());
+        return dir.new(installTxt.dirname().toString()) as NanikaContainerSyncDirectory;
       }
     }
     return dir;
@@ -82,19 +82,29 @@ export class NarLoaderStats implements fs.Stats {
   size: number;
   blksize = 0;
   blocks = 0;
+  atimeMs: number;
+  mtimeMs: number;
+  ctimeMs: number;
+  birthtimeMs: number;
   atime: Date;
   mtime: Date;
   ctime: Date;
   birthtime: Date;
 
-  constructor(entry: JSZipObject, size: number) {
-    const unixPermissions = (<number | undefined> (<any> entry).unixPermissions) || (entry.dir ? 0x755 : 0x644);
+  constructor(entry: JSZip.JSZipObject, size: number) {
+    const unixPermissions = ((entry as any).unixPermissions as number | undefined) || (entry.dir ? 0x755 : 0x644);
     this.mode = (entry.dir ? S_IFDIR : S_IFREG) | unixPermissions;
     this.size = size;
-    this.atime = entry.date;
-    this.mtime = entry.date;
-    this.ctime = entry.date;
-    this.birthtime = entry.date;
+    const date = entry.date;
+    this.atime = date;
+    this.mtime = date;
+    this.ctime = date;
+    this.birthtime = date;
+    const ms = date.getTime();
+    this.atimeMs = ms;
+    this.mtimeMs = ms;
+    this.ctimeMs = ms;
+    this.birthtimeMs = ms;
   }
 
   isFile() { return Boolean(this.mode & S_IFREG); }
