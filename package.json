@@ -39,7 +39,7 @@
     "espower-typescript": "^8.1.2",
     "karma": "^2.0.0",
     "karma-chrome-launcher": "^2.2.0",
-    "karma-detect-browsers": "^2.2.6",
+    "karma-detect-browsers": "^2.3.2",
     "karma-edge-launcher": "^0.4.2",
     "karma-espower-preprocessor": "^1.1.1",
     "karma-firefox-launcher": "^1.1.0",
