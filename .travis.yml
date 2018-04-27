@@ -3,6 +3,7 @@ dist: trusty # for chrome
 sudo: required # for chrome
 node_js:
   - 8
+  - 10
 os:
   - linux
 before_script:
