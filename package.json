@@ -24,7 +24,7 @@
     "doc": "typedoc --mode modules --out doc --readme Readme.md --name \"API Document\" --disableOutputCheck --includeDeclarations --excludeNotExported src && cd doc && git status && cd .."
   },
   "dependencies": {
-    "fso": "^2.5.15",
+    "fso": "^2.6.3",
     "jszip": "^3.1.5",
     "nanika-storage": "^3.0.0"
   },
