@@ -2,7 +2,7 @@ language: node_js
 dist: trusty # for chrome
 sudo: required # for chrome
 node_js:
-  - 8
+  - lts/*
 os:
   - linux
 before_script:
@@ -12,9 +12,6 @@ before_script:
   - sleep 3 # give xvfb some time to start
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-cache:
-  directories:
-    - node_modules
 addons:
   firefox: latest-esr
   chrome: stable
