@@ -17,9 +17,16 @@ module.exports = {
     rules: [
       {
         test:    /\.ts$/,
-        loader:  "ts-loader",
+        use: [
+          {
+            loader: "webpack-espower-loader",
+          },
+          {
+            loader:  "ts-loader",
+            options: {compilerOptions: tsconfig.compilerOptions},
+          },
+        ],
         exclude: /node_modules/,
-        options: {compilerOptions: tsconfig.compilerOptions},
       },
     ],
     noParse: /browserfs\.js/,

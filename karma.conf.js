@@ -6,7 +6,7 @@ module.exports = function(config) {
     mime:           {"text/x-typescript": ["ts", "tsx"]}, // fix typescript serving video/mp2t mime type
     frameworks:     ["mocha", "detectBrowsers"],
     files:          ["test/**/*.ts"],
-    preprocessors:  {"test/**/*.ts": ["webpack", "sourcemap", "espower"]},
+    preprocessors:  {"test/**/*.ts": ["webpack"]},
     reporters:      ["mocha"],
     webpack,
     detectBrowsers: {

@@ -41,14 +41,12 @@
     "karma-chrome-launcher": "^2.2.0",
     "karma-detect-browsers": "^2.2.6",
     "karma-edge-launcher": "^0.4.2",
-    "karma-espower-preprocessor": "^1.1.1",
     "karma-firefox-launcher": "^1.1.0",
     "karma-ie-launcher": "^1.0.0",
     "karma-mocha": "^1.3.0",
     "karma-mocha-reporter": "^2.2.5",
     "karma-opera-launcher": "^1.0.0",
     "karma-safari-launcher": "^1.0.0",
-    "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^3.0.0",
     "mocha": "^5.0.0",
     "nyc": "^12.0.1",
@@ -58,7 +56,8 @@
     "tslint": "^5.9.1",
     "typedoc": "^0.11.0",
     "typescript": "^2.7.2",
-    "webpack": "^3.10.0"
+    "webpack": "^3.10.0",
+    "webpack-espower-loader": "^2.0.0"
   },
   "author": {
     "name": "narazaka",
