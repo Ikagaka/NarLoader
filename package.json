@@ -32,7 +32,7 @@
     "@types/encoding-japanese": "^1.0.15",
     "@types/jszip": "3.1.4",
     "@types/mocha": "^5.0.0",
-    "@types/node": "^10.0.3",
+    "@types/node": "10.5.1",
     "@types/power-assert": "^1.4.29",
     "browserfs": "^1.4.3",
     "cross-env": "^5.1.3",
