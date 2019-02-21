@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "fso": "^2.5.15",
-    "jszip": "^3.1.5",
+    "jszip": "3.1.5",
     "nanika-storage": "^3.0.2"
   },
   "devDependencies": {
