@@ -54,7 +54,7 @@
     "shx": "^0.3.0",
     "ts-loader": "^3.2.0",
     "tslint": "^5.9.1",
-    "typedoc": "^0.12.0",
+    "typedoc": "^0.15.2",
     "typescript": "^2.7.2",
     "webpack": "^3.10.0",
     "webpack-espower-loader": "^2.0.0"
