@@ -35,7 +35,7 @@
     "@types/node": "^10.0.3",
     "@types/power-assert": "^1.4.29",
     "browserfs": "^1.4.3",
-    "cross-env": "^5.1.3",
+    "cross-env": "^7.0.2",
     "espower-typescript": "^9.0.0",
     "karma": "^3.0.0",
     "karma-chrome-launcher": "^2.2.0",
